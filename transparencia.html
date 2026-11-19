@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transparência e Doações | Lar dos Gatinhos</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header-banner-topo">
+        <div class="banner-wrapper">
+            <a href="../index.html" title="Voltar para o Início">
+                <img src="../assets/logo/hero-lar-gatinhos.png" alt="Lar dos Gatinhos" class="hero-banner-img" onerror="this.src='https://placehold.co/1200x400/6b4c9a/ffffff?text=Lar+dos+Gatinhos'">
+            </a>
+        </div>
+
+        <div class="menu-flutuante-container">
+            <button class="menu-toggle" id="btn-menu-mobile" aria-label="Abrir Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="lista-menu-mobile">
+                <li><a href="../index.html" class="">Início</a></li>
+                <li><a href="adocao.html" class="">Adotar Gatos</a></li>
+                <li><a href="rifas.html" class="">Rifas Solidárias</a></li>
+                <li><a href="colaboradores.html" class="">Colaboradores</a></li>
+                <li><a href="transparencia.html" class="ativo">Transparência & PIX</a></li>
+                <li><a href="sobre.html" class="">Quem Somos</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="faixa-slogan">
+        <p>Resgate, Cuidado e Adoção Responsável</p>
+    </div>
+
+    <main class="container">
+        <section>
+            <div class="titulo-secao" style="margin-top: 20px;">
+                <h2>Portal da Transparência & Prestação de Contas</h2>
+                <p>Aqui você encontra balanços financeiros mensais, notas fiscais de ração e atendimento veterinário, garantindo total lisura com as doações.</p>
+            </div>
+
+            <div class="grid-transparencia" style="margin-bottom: 40px;">
+                <div class="card-box">
+                    <h3 style="color: var(--cor-primaria); margin-bottom: 14px;">
+                        Balanço Detalhado (<span id="mes-referencia">Novembro / 2026</span>)
+                    </h3>
+                    <div class="linha-conta">
+                        <span>Total Arrecadado (Doações + Rifas):</span>
+                        <strong id="valor-arrecadado" style="color: var(--cor-sucesso);">R$ 8.450,00</strong>
+                    </div>
+                    <div class="linha-conta">
+                        <span>Gastos com Ração e Areia (+100 gatos):</span>
+                        <strong id="gasto-racao">R$ 4.620,00</strong>
+                    </div>
+                    <div class="linha-conta">
+                        <span>Clínica Veterinária e Medicamentos:</span>
+                        <strong id="gasto-vet">R$ 3.180,00</strong>
+                    </div>
+                    <div class="linha-conta">
+                        <span>Manutenção da Estrutura e Limpeza:</span>
+                        <strong id="gasto-outros">R$ 940,00</strong>
+                    </div>
+                </div>
+
+                <div class="card-box">
+                    <h3 style="color: var(--cor-primaria); margin-bottom: 10px;">Faça a Diferença com o PIX</h3>
+                    <p style="font-size: 0.95rem; color: var(--cor-texto-suave); margin-bottom: 16px;">
+                        Toda doação é convertida diretamente em alimentação e cuidados veterinários para os mais de 100 resgatados.
+                    </p>
+                    <div class="pix-box">
+                        <span>Chave PIX Oficial:</span>
+                        <span id="chave-pix" class="chave-pix-texto">lardosgatinhos@pix.org.br</span>
+                        <button onclick="copiarPix()" class="btn btn-whatsapp">Copiar Chave PIX</button>
+                        <p id="msg-pix-copiado" style="color: var(--cor-sucesso); font-weight: 700; margin-top: 10px; display: none;">
+                            Chave PIX copiada com sucesso! Muito obrigado!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-box" style="text-align: center;">
+                <h3 style="color: var(--cor-primaria); margin-bottom: 12px;">Como comprovar os gastos?</h3>
+                <p style="max-width: 750px; margin: 0 auto; color: var(--cor-texto-suave);">
+                    Mantemos todas as notas fiscais de fornecedores de ração e recibos de clínicas veterinárias arquivados e disponíveis para consulta pública mediante solicitação via WhatsApp da coordenação.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>Lar dos Gatinhos</strong> — Transparência e compromisso com a causa animal.</p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
