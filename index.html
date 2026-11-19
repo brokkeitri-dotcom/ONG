@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lar dos Gatinhos | Início, História e Transparência</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header-banner-topo">
+        <div class="banner-wrapper">
+            <a href="index.html" title="Voltar para o Início">
+                <img src="assets/logo/hero-lar-gatinhos.png" alt="Lar dos Gatinhos" class="hero-banner-img" onerror="this.src='https://placehold.co/1200x400/6b4c9a/ffffff?text=Lar+dos+Gatinhos'">
+            </a>
+        </div>
+
+        <div class="menu-flutuante-container">
+            <button class="menu-toggle" id="btn-menu-mobile" aria-label="Abrir Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="lista-menu-mobile">
+                <li><a href="index.html" class="ativo">Início</a></li>
+                <li><a href="paginas/adocao.html" class="">Adotar Gatos</a></li>
+                <li><a href="paginas/rifas.html" class="">Rifas Solidárias</a></li>
+                <li><a href="paginas/colaboradores.html" class="">Colaboradores</a></li>
+                <li><a href="paginas/transparencia.html" class="">Transparência & PIX</a></li>
+                <li><a href="paginas/sobre.html" class="">Quem Somos</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="faixa-slogan">
+        <p>Resgate, Cuidado e Adoção Responsável</p>
+    </div>
+
+    <main class="container">
+        <section id="historia" style="padding-top: 20px;">
+            <div class="grid-impacto">
+                <div class="card-numero">
+                    <strong style="color: #e76f51;">+100</strong>
+                    <span style="color: var(--cor-texto-suave);">felinos acolhidos*</span>
+                </div>
+                <div class="card-numero">
+                    <strong style="color: #e76f51;">+1.000</strong>
+                    <span style="color: var(--cor-texto-suave);">adoções realizadas*</span>
+                </div>
+                <div class="card-numero">
+                    <strong style="color: #e76f51;">100%</strong>
+                    <span style="color: var(--cor-texto-suave);">trabalho voluntário*</span>
+                </div>
+            </div>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--cor-texto-suave); margin-bottom: 45px;">
+                *Números dinâmicos e atualizados conforme registros oficiais da ONG.
+            </p>
+
+            <div class="box-historia">
+                <div>
+                    <h2 style="color: var(--cor-primaria); margin-bottom: 16px;">Nossa História e Missão</h2>
+                    <p style="margin-bottom: 14px;">
+                        O <strong>Lar dos Gatinhos</strong> nasceu da paixão incondicional pelos animais e da urgência de amparar felinos abandonados em Sorocaba e região. Hoje mantemos uma estrutura dedicada que abriga mais de 100 gatinhos — entre filhotes, adultos, idosos e gatinhos especiais (FIV/FeLV) que recebem ração de primeira linha, exames e muito carinho.
+                    </p>
+                    <p style="margin-bottom: 24px;">
+                        Sobrevivemos inteiramente de doações voluntárias e de empresas parceiras que acreditam na causa animal.
+                    </p>
+                    <a href="paginas/adocao.html" class="btn btn-roxo">Ver Todos os Gatos para Adoção</a>
+                </div>
+                <div>
+                    <img src="assets/logo/hero-lar-gatinhos.png" alt="Abrigo Lar dos Gatinhos" onerror="this.src='https://placehold.co/600x400/6b4c9a/ffffff?text=Lar+dos+Gatinhos'">
+                </div>
+            </div>
+        </section>
+
+        <section class="mural-parceiros">
+            <div class="titulo-secao" style="margin-bottom: 15px;">
+                <h2>Empresas e Marcas que Colaboram</h2>
+                <p>Empresas amigas dos animais que apoiam nossa estrutura e ajudam a alimentar nossos +100 gatinhos todos os meses.</p>
+            </div>
+            <div class="grid-parceiros" id="grid-parceiros-home">
+                <p style="grid-column: 1/-1; color: var(--cor-texto-suave);">Carregando parceiros...</p>
+            </div>
+            <div class="cta-se-ja-parceiro">
+                <div>
+                    <h3 style="color: var(--cor-primaria); margin-bottom: 4px;">Sua empresa quer apoiar esta causa?</h3>
+                    <p style="font-size: 0.95rem; color: var(--cor-texto-suave);">Exponha sua marca para centenas de visitantes e faça a diferença na vida dos nossos resgatados.</p>
+                </div>
+                <a href="paginas/colaboradores.html" class="btn btn-roxo">Quero ser Parceiro</a>
+            </div>
+        </section>
+
+        <section id="transparencia">
+            <div class="titulo-secao">
+                <h2>Portal da Transparência & Doações</h2>
+                <p>Prestação de contas mensal auditada e aberta para toda a comunidade.</p>
+            </div>
+
+            <div class="grid-transparencia">
+                <div class="card-box">
+                    <h3 style="color: var(--cor-primaria); margin-bottom: 14px;">
+                        Resumo Financeiro (<span id="mes-referencia">Carregando...</span>)
+                    </h3>
+                    <div class="linha-conta">
+                        <span>Total Arrecadado (Doações + Rifas):</span>
+                        <strong id="valor-arrecadado" style="color: var(--cor-sucesso);">R$ 8.450,00</strong>
+                    </div>
+                    <div class="linha-conta">
+                        <span>Gastos com Ração e Areia (+100 gatos):</span>
+                        <strong id="gasto-racao">R$ 4.620,00</strong>
+                    </div>
+                    <div class="linha-conta">
+                        <span>Clínica Veterinária e Medicamentos:</span>
+                        <strong id="gasto-vet">R$ 3.180,00</strong>
+                    </div>
+                    <div class="linha-conta">
+                        <span>Manutenção da Estrutura e Limpeza:</span>
+                        <strong id="gasto-outros">R$ 940,00</strong>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--cor-texto-suave); margin-top: 16px;">
+                        * Notas fiscais e comprovantes detalhados disponíveis na aba de Transparência.
+                    </p>
+                </div>
+
+                <div class="card-box">
+                    <h3 style="color: var(--cor-primaria); margin-bottom: 10px;">Ajude com Qualquer Valor via PIX</h3>
+                    <p style="font-size: 0.95rem; color: var(--cor-texto-suave); margin-bottom: 16px;">
+                        Consumimos dezenas de quilos de ração por semana. Sua doação via PIX salva vidas imediatamente!
+                    </p>
+                    <div class="pix-box">
+                        <span>Chave PIX Oficial:</span>
+                        <span id="chave-pix" class="chave-pix-texto">lardosgatinhos@pix.org.br</span>
+                        <button onclick="copiarPix()" class="btn btn-whatsapp">Copiar Chave PIX</button>
+                        <p id="msg-pix-copiado" style="color: var(--cor-sucesso); font-weight: 700; margin-top: 10px; display: none;">
+                            Chave PIX copiada com sucesso! Muito obrigado!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>Lar dos Gatinhos</strong> — Amor, Resgate e Adoção Responsável.</p>
+            <p style="margin-top: 6px; font-size: 0.85rem;">Sincronizado automaticamente com Google Sheets.</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
