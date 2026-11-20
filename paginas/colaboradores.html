@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colaboradores e Empresas Parceiras | Lar dos Gatinhos</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=2">
+    <style>
+        @media (max-width: 768px) {
+            .box-historia {
+                display: flex !important;
+                flex-direction: column !important;
+                grid-template-columns: 1fr !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                gap: 20px !important;
+            }
+            .box-historia > div,
+            .box-historia .card-box {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
