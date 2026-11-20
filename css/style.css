@@ -639,3 +639,18 @@ footer p {
         grid-template-columns: 1fr;
     }
 }
+/* Empilha "Sua Marca no Lar dos Gatinhos" e "Seja um Colaborador!" no celular */
+@media (max-width: 768px) {
+  .grid-colaborador,
+  .parceria-grid,
+  .secao-parceria > div,
+  main section > div[style*="grid"],
+  main section > div[style*="flex"] {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 24px !important;
+  }
+}
+
