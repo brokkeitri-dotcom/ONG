@@ -45,7 +45,66 @@
             </div>
 
             <div id="grid-todas-rifas" class="grid-rifas">
-                <p style="grid-column: 1/-1; text-align: center;">Carregando rifas...</p>
+                <article class="card-rifa">
+                    <div style="position: relative; width: 100%; background: #111; overflow: hidden;">
+                        <img
+                            id="rifa-estatica-img"
+                            src="https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/62695f96-ca8f-4121-8545-a2e9169ea5c2.webp"
+                            alt="Super Rifa de Natal - Lar Gatinhos"
+                            style="width: 100%; height: auto; max-height: 440px; object-fit: contain; display: block;"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="mudarSlideRifaEstatica(-1)"
+                            aria-label="Imagem anterior"
+                            style="position: absolute; top: 50%; left: 12px; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(255, 255, 255, 0.92); color: #111; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 2;"
+                        >&lt;</button>
+
+                        <button
+                            type="button"
+                            onclick="mudarSlideRifaEstatica(1)"
+                            aria-label="Próxima imagem"
+                            style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; border: none; background: rgba(255, 255, 255, 0.92); color: #111; font-size: 18px; font-weight: bold; cursor: pointer; z-index: 2;"
+                        >&gt;</button>
+
+                        <span
+                            id="rifa-estatica-badge"
+                            style="position: absolute; bottom: 12px; right: 12px; background: rgba(0, 0, 0, 0.78); color: #fff; padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: bold;"
+                        >1/4</span>
+                    </div>
+
+                    <div class="card-rifa-corpo">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap;">
+                            <span class="status-rifa status-ativa" style="margin: 0;">● Rifa Ativa</span>
+                            <span style="background: #198754; color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold;">
+                                R$ 10,00 / cota
+                            </span>
+                        </div>
+
+                        <h3 style="color: var(--cor-primaria); margin-bottom: 8px;">Super Rifa de Natal</h3>
+                        <p style="font-size: 0.95rem;">
+                            <strong>Prêmios:</strong> 1º: TV Samsung 43" + Fonte pets | 2º: Air Fryer Britânia + Cama Nuvem | 3º: Aspirador portátil sem fio + Comedouro elevado | 4º: Cafeteira Cadence + 2 xícaras + Kit café + Comedouro duplo | 5º: Pix R$ 500 + Chinelo personalizado + Bolsa transporte pet (e demais prêmios na galeria).
+                        </p>
+
+                        <div class="detalhes-rifa">
+                            <p><strong>Valor da Cota:</strong> R$ 10,00</p>
+                            <p style="margin-top: 6px; color: var(--cor-texto-suave);">
+                                Sorteio realizado após a venda de todas as cotas. Toda a renda ajuda na compra de ração, areia, castrações e cuidados veterinários dos +100 gatinhos resgatados.
+                            </p>
+                        </div>
+
+                        <a
+                            href="https://rd.app/s/super-rifa-de-natal/9862339"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-primario"
+                            style="width: 100%;"
+                        >
+                            Comprar Cotas no Site Oficial ↗
+                        </a>
+                    </div>
+                </article>
             </div>
 
             <div class="card-box" style="margin-top: 50px; text-align: center;">
@@ -53,14 +112,14 @@
                 <p style="max-width: 740px; margin: 0 auto 20px; color: var(--cor-texto-suave);">
                     1. Escolha uma rifa ativa acima e clique no botão para acessar a plataforma oficial.<br>
                     2. Selecione seus números, cadastre seus dados e realize o pagamento na plataforma parceira.<br>
-                    3. Todo o valor arrecadado é integralmente prestado contas em nosso <strong>Portal da Transparência</strong>.
+                    3. O sorteio acontece assim que todas as cotas forem vendidas, e o valor é prestado contas em nosso <strong>Portal da Transparência</strong>.
                 </p>
                 <a href="transparencia.html" class="btn btn-roxo">Ver Prestação de Contas</a>
             </div>
         </section>
     </main>
 
-        <footer>
+    <footer>
         <div class="container">
             <p><strong>ONG Lar Gatinhos Sorocaba</strong> — Amor, Resgate e Adoção Responsável.</p>
             <p style="margin-top: 6px; font-size: 0.85rem;">CNPJ: 61.953.983/0001-75 • Sorocaba/SP</p>
@@ -70,6 +129,26 @@
         </div>
     </footer>
 
+    <script>
+        const fotosRifaRoteiro = [
+            "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/62695f96-ca8f-4121-8545-a2e9169ea5c2.webp",
+            "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/a7bf2897-52d5-4cfc-ad54-2cae3103cc26.webp",
+            "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/5815d465-04b7-48a5-b6ba-927567f5234b.webp",
+            "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/9d727c7d-be26-456b-ad0f-cc14560d7596.webp"
+        ];
+        let indiceRifaEstatica = 0;
+
+        function mudarSlideRifaEstatica(direcao) {
+            const total = fotosRifaRoteiro.length;
+            indiceRifaEstatica = (indiceRifaEstatica + direcao + total) % total;
+
+            const img = document.getElementById("rifa-estatica-img");
+            const badge = document.getElementById("rifa-estatica-badge");
+
+            if (img) img.src = fotosRifaRoteiro[indiceRifaEstatica];
+            if (badge) badge.textContent = `${indiceRifaEstatica + 1}/${total}`;
+        }
+    </script>
     <script src="../js/script.js"></script>
 </body>
 </html>
