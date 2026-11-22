@@ -1,5 +1,5 @@
 /* =========================================================
-   LAR DOS GATINHOS - MOTOR COM GOOGLE SHEETS + MENU MOBILE (V12)
+   LAR DOS GATINHOS - MOTOR COM GOOGLE SHEETS + MENU MOBILE + CARROSSEL RIFAS
    ========================================================= */
 const SPREADSHEET_ID = "1y139l0OucUYD2VncI02RvYTmkNOx_38tqFkRUt6SCxc";
 
@@ -28,13 +28,18 @@ const DADOS_FALLBACK = {
     ],
     rifas: [
         {
-            titulo: "Rifa Solidária - Kit Churrasco & Pix de R$ 500",
-            premio: "1º Prêmio: R$ 500 no PIX | 2º Prêmio: Kit Churrasco Completo",
+            titulo: "Super Rifa de Natal",
+            premio: "1º: TV Samsung 43\" + Fonte pets | 2º: Air Fryer Britânia + Cama Nuvem | 3º: Aspirador portátil + Comedouro | 4º: Cafeteira + Kit café | 5º: Pix R$ 500 + Chinelo + Bolsa pet",
             valorCota: "R$ 10,00",
-            dataSorteio: "30/11/2026 (Loteria Federal)",
-            destino: "Compra de 15 sacos de ração Premium e vacinas para os +100 gatos.",
-            linkExterno: "https://rifa.digital/",
-            imagem: "https://placehold.co/600x400/e76f51/ffffff?text=Rifa+Solidaria+Ativa",
+            dataSorteio: "",
+            destino: "Sorteio realizado após a venda de todas as cotas. Toda a renda custeia ração, areia e cuidados veterinários para os +100 gatos.",
+            linkExterno: "https://rd.app/s/super-rifa-de-natal/9862339",
+            imagens: [
+                "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/62695f96-ca8f-4121-8545-a2e9169ea5c2.webp",
+                "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/a7bf2897-52d5-4cfc-ad54-2cae3103cc26.webp",
+                "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/5815d465-04b7-48a5-b6ba-927567f5234b.webp",
+                "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/9d727c7d-be26-456b-ad0f-cc14560d7596.webp"
+            ],
             status: "Ativa"
         }
     ],
@@ -48,6 +53,7 @@ let dadosAtuais = JSON.parse(JSON.stringify(DADOS_FALLBACK));
 let listaGatosFiltrada = [];
 let paginaAtual = 1;
 const GATOS_POR_PAGINA = 12;
+const indicesCarrosselRifas = {};
 
 /* Controle do Botão Hambúrguer (3 traços) */
 function inicializarMenuMobile() {
@@ -60,7 +66,6 @@ function inicializarMenuMobile() {
             listaMenu.classList.toggle("ativo");
         });
 
-        // Fecha o menu ao clicar fora dele
         document.addEventListener("click", (e) => {
             if (!btnMenu.contains(e.target) && !listaMenu.contains(e.target)) {
                 btnMenu.classList.remove("aberto");
@@ -71,8 +76,9 @@ function inicializarMenuMobile() {
 }
 
 function formatarUrlImagem(url) {
-    if (!url) return "https://placehold.co/400x350/6b4c9a/ffffff?text=Lar+dos+Gatinhos";
+    if (!url) return "";
     url = url.trim();
+    if (!url) return "";
     const matchDrive = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
     if (url.includes("drive.google.com") && matchDrive && matchDrive[1]) {
         return `https://lh3.googleusercontent.com/d/${matchDrive[1]}`;
@@ -153,28 +159,35 @@ async function carregarPlanilhaGoogle() {
                 perfil: row[4] || "Negativo",
                 destaque: (row[5] || "").toUpperCase() === "SIM",
                 bio: row[6] || "Esperando um lar cheio de amor.",
-                foto: formatarUrlImagem(row[7])
+                foto: formatarUrlImagem(row[7]) || "https://placehold.co/400x350/6b4c9a/ffffff?text=Lar+dos+Gatinhos"
             }));
         }
 
         if (csvRifas.length >= 2) {
-            dadosAtuais.rifas = csvRifas.slice(1).map(row => ({
-                titulo: row[0] || "Rifa Solidária",
-                premio: row[1] || "",
-                valorCota: row[2] || "R$ 10,00",
-                dataSorteio: row[3] || "",
-                destino: row[4] || "",
-                linkExterno: row[5] || "#",
-                imagem: formatarUrlImagem(row[6]),
-                status: row[7] || "Ativa"
-            }));
+            dadosAtuais.rifas = csvRifas.slice(1).map(row => {
+                const listaImgs = (row[6] || "")
+                    .split(",")
+                    .map(u => formatarUrlImagem(u))
+                    .filter(u => u !== "");
+
+                return {
+                    titulo: row[0] || "Rifa Solidária",
+                    premio: row[1] || "",
+                    valorCota: row[2] || "R$ 10,00",
+                    dataSorteio: (row[3] || "").trim(),
+                    destino: row[4] || "",
+                    linkExterno: row[5] || "#",
+                    imagens: listaImgs.length > 0 ? listaImgs : ["https://placehold.co/600x400/e76f51/ffffff?text=Rifa+Solidaria"],
+                    status: row[7] || "Ativa"
+                };
+            });
         }
 
         if (csvParceiros.length >= 2) {
             dadosAtuais.parceiros = csvParceiros.slice(1).map(row => ({
                 nome: row[0] || "Empresa Parceira",
                 categoria: row[1] || "Apoiador Oficial",
-                logo: formatarUrlImagem(row[2]),
+                logo: formatarUrlImagem(row[2]) || "https://placehold.co/200x80/6b4c9a/ffffff?text=Parceiro",
                 link: row[3] || "#"
             }));
         }
@@ -321,20 +334,50 @@ function mudarPagina(direcao) {
     window.scrollTo({ top: 180, behavior: "smooth" });
 }
 
-function criarCardRifaHTML(rifa) {
+function criarCardRifaHTML(rifa, index) {
     const ativa = rifa.status.toLowerCase() === "ativa";
+    const imgs = rifa.imagens && rifa.imagens.length > 0 ? rifa.imagens : ["https://placehold.co/600x400/e76f51/ffffff?text=Rifa+Solidaria"];
+    indicesCarrosselRifas[index] = 0;
+
+    const temMultiplasFotos = imgs.length > 1;
+
     return `
         <article class="card-rifa ${ativa ? "" : "encerrada"}">
-            <img src="${rifa.imagem}" alt="${rifa.titulo}" loading="lazy">
+            <div style="position: relative; width: 100%; background: #111; overflow: hidden;">
+                <img id="rifa-img-${index}" src="${imgs[0]}" alt="${rifa.titulo}" loading="lazy"
+                    style="width: 100%; height: auto; max-height: 440px; object-fit: contain; display: block;">
+
+                ${temMultiplasFotos ? `
+                    <button type="button" onclick="mudarSlideRifa(${index}, -1)" aria-label="Anterior"
+                        style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,0.92); color: #111; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 2;">
+                        &lt;
+                    </button>
+                    <button type="button" onclick="mudarSlideRifa(${index}, 1)" aria-label="Próxima"
+                        style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,0.92); color: #111; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 2;">
+                        &gt;
+                    </button>
+                    <span id="rifa-badge-${index}"
+                        style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.78); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">
+                        1/${imgs.length}
+                    </span>
+                ` : ""}
+            </div>
+
             <div class="card-rifa-corpo">
-                <span class="status-rifa ${ativa ? "status-ativa" : "status-encerrada"}">
-                    ${ativa ? "● Rifa Ativa" : "Rifa Encerrada"}
-                </span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                    <span class="status-rifa ${ativa ? "status-ativa" : "status-encerrada"}" style="margin: 0;">
+                        ${ativa ? "● Rifa Ativa" : "Rifa Encerrada"}
+                    </span>
+                    <span style="background: #198754; color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold;">
+                        ${rifa.valorCota} / cota
+                    </span>
+                </div>
+
                 <h3 style="color: var(--cor-primaria); margin-bottom: 8px;">${rifa.titulo}</h3>
-                <p style="font-size: 0.95rem;"><strong>Prêmio:</strong> ${rifa.premio}</p>
+                <p style="font-size: 0.95rem;"><strong>Prêmios:</strong> ${rifa.premio}</p>
                 <div class="detalhes-rifa">
                     <p><strong>Valor da Cota:</strong> ${rifa.valorCota}</p>
-                    <p><strong>Sorteio:</strong> ${rifa.dataSorteio}</p>
+                    ${rifa.dataSorteio ? `<p><strong>Sorteio:</strong> ${rifa.dataSorteio}</p>` : ""}
                     <p style="margin-top: 6px; color: var(--cor-texto-suave);">${rifa.destino}</p>
                 </div>
                 ${ativa
@@ -350,11 +393,26 @@ function criarCardRifaHTML(rifa) {
     `;
 }
 
+function mudarSlideRifa(indexRifa, direcao) {
+    const rifa = window._rifasRenderizadas?.[indexRifa];
+    if (!rifa || !rifa.imagens || rifa.imagens.length <= 1) return;
+
+    const total = rifa.imagens.length;
+    indicesCarrosselRifas[indexRifa] = (indicesCarrosselRifas[indexRifa] + direcao + total) % total;
+
+    const imgEl = document.getElementById(`rifa-img-${indexRifa}`);
+    const badgeEl = document.getElementById(`rifa-badge-${indexRifa}`);
+
+    if (imgEl) imgEl.src = rifa.imagens[indicesCarrosselRifas[indexRifa]];
+    if (badgeEl) badgeEl.textContent = `${indicesCarrosselRifas[indexRifa] + 1}/${total}`;
+}
+
 function renderizarRifas() {
     const containerAba = document.getElementById("grid-todas-rifas");
     if (containerAba) {
         const rifasOrdenadas = [...dadosAtuais.rifas].sort((a, b) => (a.status.toLowerCase() === "ativa" ? -1 : 1));
-        containerAba.innerHTML = rifasOrdenadas.map(criarCardRifaHTML).join("");
+        window._rifasRenderizadas = rifasOrdenadas;
+        containerAba.innerHTML = rifasOrdenadas.map((rifa, idx) => criarCardRifaHTML(rifa, idx)).join("");
     }
 }
 
