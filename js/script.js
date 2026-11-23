@@ -1,5 +1,5 @@
 /* =========================================================
-   LAR DOS GATINHOS - MOTOR COM GOOGLE SHEETS + MENU MOBILE + CARROSSEL RIFAS (LINHA A LINHA)
+   LAR DOS GATINHOS - MOTOR COMPLETO COM GOOGLE SHEETS
    ========================================================= */
 const SPREADSHEET_ID = "1y139l0OucUYD2VncI02RvYTmkNOx_38tqFkRUt6SCxc";
 
@@ -18,7 +18,10 @@ const DADOS_FALLBACK = {
         arrecadado: "R$ 8.450,00",
         racao: "R$ 4.620,00",
         veterinario: "R$ 3.180,00",
-        outros: "R$ 940,00"
+        outros: "R$ 940,00",
+        bannerUrl: "",
+        imagensInicial: [],
+        imagensQuemSomos: []
     },
     parceiros: [
         { nome: "PetShop Sorocaba", categoria: "Ração & Suprimentos", logo: "https://placehold.co/200x80/6b4c9a/ffffff?text=PetShop+Sorocaba", link: "#" },
@@ -60,6 +63,7 @@ let listaGatosFiltrada = [];
 let paginaAtual = 1;
 const GATOS_POR_PAGINA = 12;
 const indicesCarrosselRifas = {};
+const estadoCarrosseisSecao = {};
 
 /* Controle do Botão Hambúrguer (3 traços) */
 function inicializarMenuMobile() {
@@ -90,6 +94,17 @@ function formatarUrlImagem(url) {
         return `https://lh3.googleusercontent.com/d/${matchDrive[1]}`;
     }
     return url;
+}
+
+function formatarUrlExterna(url) {
+    if (!url) return "#";
+    let limpa = url.trim();
+    if (!limpa || limpa === "#") return "#";
+    limpa = limpa.replace(/^https?:\/\//i, "https://");
+    if (!/^https?:\/\//i.test(limpa)) {
+        limpa = "https://" + limpa;
+    }
+    return limpa;
 }
 
 function parseCSV(textoCSV) {
@@ -145,6 +160,16 @@ async function carregarPlanilhaGoogle() {
 
         if (csvGeral.length >= 2) {
             const g = csvGeral[1];
+            const fotosInicial = csvGeral.slice(1)
+                .flatMap(row => (row[8] || "").split(","))
+                .map(u => formatarUrlImagem(u))
+                .filter(u => u !== "");
+
+            const fotosQuemSomos = csvGeral.slice(1)
+                .flatMap(row => (row[9] || "").split(","))
+                .map(u => formatarUrlImagem(u))
+                .filter(u => u !== "");
+
             dadosAtuais.geral = {
                 whatsapp: g[0] || dadosAtuais.geral.whatsapp,
                 chavePix: g[1] || dadosAtuais.geral.chavePix,
@@ -152,7 +177,10 @@ async function carregarPlanilhaGoogle() {
                 arrecadado: g[3] || dadosAtuais.geral.arrecadado,
                 racao: g[4] || dadosAtuais.geral.racao,
                 veterinario: g[5] || dadosAtuais.geral.veterinario,
-                outros: g[6] || dadosAtuais.geral.outros
+                outros: g[6] || dadosAtuais.geral.outros,
+                bannerUrl: formatarUrlImagem(g[7] || ""),
+                imagensInicial: fotosInicial,
+                imagensQuemSomos: fotosQuemSomos
             };
         }
 
@@ -268,18 +296,76 @@ function preencherDadosGerais(geral) {
     if (elWp) {
         elWp.href = `https://wa.me/${geral.whatsapp}?text=Olá! Gostaria de cadastrar minha empresa como parceira do Lar dos Gatinhos.`;
     }
+
+    const elBanner = document.getElementById("img-banner-topo");
+    if (elBanner && geral.bannerUrl) {
+        elBanner.src = geral.bannerUrl;
+    }
+
+    renderizarCarrosselSecao("carrossel-historia", geral.imagensInicial);
+    renderizarCarrosselSecao("carrossel-sobre", geral.imagensQuemSomos);
+}
+
+function renderizarCarrosselSecao(containerId, imagens) {
+    const container = document.getElementById(containerId);
+    if (!container || !imagens || imagens.length === 0) return;
+
+    estadoCarrosseisSecao[containerId] = {
+        imagens: imagens,
+        indice: 0
+    };
+
+    const temMultiplas = imagens.length > 1;
+
+    container.innerHTML = `
+        <div style="position: relative; width: 100%; border-radius: 14px; overflow: hidden; background: #111;">
+            <img id="${containerId}-img" src="${imagens[0]}" alt="Lar dos Gatinhos" loading="lazy"
+                style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+            ${temMultiplas ? `
+                <button type="button" onclick="mudarSlideSecao('${containerId}', -1)" aria-label="Anterior"
+                    style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,0.92); color: #111; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 2;">
+                    &lt;
+                </button>
+                <button type="button" onclick="mudarSlideSecao('${containerId}', 1)" aria-label="Próxima"
+                    style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,0.92); color: #111; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 2;">
+                    &gt;
+                </button>
+                <span id="${containerId}-badge"
+                    style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.78); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">
+                    1/${imagens.length}
+                </span>
+            ` : ""}
+        </div>
+    `;
+}
+
+function mudarSlideSecao(containerId, direcao) {
+    const estado = estadoCarrosseisSecao[containerId];
+    if (!estado || !estado.imagens || estado.imagens.length <= 1) return;
+
+    const total = estado.imagens.length;
+    estado.indice = (estado.indice + direcao + total) % total;
+
+    const imgEl = document.getElementById(`${containerId}-img`);
+    const badgeEl = document.getElementById(`${containerId}-badge`);
+
+    if (imgEl) imgEl.src = estado.imagens[estado.indice];
+    if (badgeEl) badgeEl.textContent = `${estado.indice + 1}/${total}`;
 }
 
 function renderizarParceiros() {
     const containerHome = document.getElementById("grid-parceiros-home");
     const containerPagina = document.getElementById("grid-parceiros-pagina");
-    const htmlParceiros = dadosAtuais.parceiros.map(p => `
-        <a href="${p.link !== '#' ? p.link : 'javascript:void(0)'}" ${p.link !== '#' ? 'target="_blank" rel="noopener"' : ''} class="card-parceiro">
-            <img src="${p.logo}" alt="${p.nome}" loading="lazy">
-            <span>${p.nome}</span>
-            <small>${p.categoria}</small>
-        </a>
-    `).join("");
+    const htmlParceiros = dadosAtuais.parceiros.map(p => {
+        const linkParceiro = formatarUrlExterna(p.link);
+        return `
+            <a href="${linkParceiro !== '#' ? linkParceiro : 'javascript:void(0)'}" ${linkParceiro !== '#' ? 'target="_blank" rel="noopener noreferrer"' : ''} class="card-parceiro">
+                <img src="${p.logo}" alt="${p.nome}" loading="lazy">
+                <span>${p.nome}</span>
+                <small>${p.categoria}</small>
+            </a>
+        `;
+    }).join("");
 
     if (containerHome) containerHome.innerHTML = htmlParceiros;
     if (containerPagina) containerPagina.innerHTML = htmlParceiros;
@@ -302,7 +388,7 @@ function criarCardGatoHTML(gato) {
                     <span class="tag">${gato.saude}</span>
                 </div>
                 <p>${gato.bio}</p>
-                <a href="${linkZap}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="width: 100%;">
+                <a href="${linkZap}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%;">
                     Quero Adotar ${gato.nome}
                 </a>
             </div>
@@ -381,6 +467,7 @@ function criarCardRifaHTML(rifa, index) {
     const listaPremios = Array.isArray(rifa.premios) && rifa.premios.length > 0
         ? rifa.premios
         : (rifa.premio ? rifa.premio.split("|").map(p => p.trim()).filter(Boolean) : []);
+    const urlRifaFinal = formatarUrlExterna(rifa.linkExterno);
 
     return `
         <article class="card-rifa ${ativa ? "" : "encerrada"}">
@@ -435,7 +522,7 @@ function criarCardRifaHTML(rifa, index) {
                     ${rifa.destino ? `<p style="margin-top: 6px; color: var(--cor-texto-suave);">${rifa.destino}</p>` : ""}
                 </div>
                 ${ativa
-                    ? `<a href="${rifa.linkExterno}" target="_blank" rel="noopener" class="btn btn-primario" style="width: 100%;">
+                    ? `<a href="${urlRifaFinal}" target="_blank" rel="noopener noreferrer" class="btn btn-primario" style="width: 100%;">
                         Comprar Cotas no Site Oficial ↗
                        </a>`
                     : `<button class="btn" disabled style="width: 100%; background: #ddd; color: #666; cursor: not-allowed;">
