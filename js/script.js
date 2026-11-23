@@ -297,29 +297,45 @@ function preencherDadosGerais(geral) {
         elWp.href = `https://wa.me/${geral.whatsapp}?text=Olá! Gostaria de cadastrar minha empresa como parceira do Lar dos Gatinhos.`;
     }
 
+    const isSubpagina = window.location.pathname.includes("/paginas/");
+    const imgPadrao = isSubpagina
+        ? "../assets/logo/hero-lar-gatinhos.png"
+        : "assets/logo/hero-lar-gatinhos.png";
+
     const elBanner = document.getElementById("img-banner-topo");
-    if (elBanner && geral.bannerUrl) {
-        elBanner.src = geral.bannerUrl;
+    if (elBanner) {
+        if (geral.bannerUrl) {
+            elBanner.src = geral.bannerUrl;
+        } else {
+            elBanner.src = imgPadrao;
+        }
     }
 
-    renderizarCarrosselSecao("carrossel-historia", geral.imagensInicial);
-    renderizarCarrosselSecao("carrossel-sobre", geral.imagensQuemSomos);
+    renderizarCarrosselSecao("carrossel-historia", geral.imagensInicial, imgPadrao);
+    renderizarCarrosselSecao("carrossel-sobre", geral.imagensQuemSomos, imgPadrao);
 }
 
-function renderizarCarrosselSecao(containerId, imagens) {
+function renderizarCarrosselSecao(containerId, imagens, imgPadrao = "assets/logo/hero-lar-gatinhos.png") {
     const container = document.getElementById(containerId);
-    if (!container || !imagens || imagens.length === 0) return;
+    if (!container) return;
+
+    let lista = [];
+    if (Array.isArray(imagens) && imagens.length > 0) {
+        lista = imagens;
+    } else {
+        lista = [imgPadrao];
+    }
 
     estadoCarrosseisSecao[containerId] = {
-        imagens: imagens,
+        imagens: lista,
         indice: 0
     };
 
-    const temMultiplas = imagens.length > 1;
+    const temMultiplas = lista.length > 1;
 
     container.innerHTML = `
         <div style="position: relative; width: 100%; border-radius: 14px; overflow: hidden; background: #111;">
-            <img id="${containerId}-img" src="${imagens[0]}" alt="Lar dos Gatinhos" loading="lazy"
+            <img id="${containerId}-img" src="${lista[0]}" alt="Lar dos Gatinhos" loading="lazy"
                 style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
             ${temMultiplas ? `
                 <button type="button" onclick="mudarSlideSecao('${containerId}', -1)" aria-label="Anterior"
@@ -332,7 +348,7 @@ function renderizarCarrosselSecao(containerId, imagens) {
                 </button>
                 <span id="${containerId}-badge"
                     style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.78); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">
-                    1/${imagens.length}
+                    1/${lista.length}
                 </span>
             ` : ""}
         </div>
