@@ -1,5 +1,5 @@
 /* =========================================================
-   LAR DOS GATINHOS - MOTOR COM GOOGLE SHEETS + MENU MOBILE + CARROSSEL RIFAS
+   LAR DOS GATINHOS - MOTOR COM GOOGLE SHEETS + MENU MOBILE + CARROSSEL RIFAS (LINHA A LINHA)
    ========================================================= */
 const SPREADSHEET_ID = "1y139l0OucUYD2VncI02RvYTmkNOx_38tqFkRUt6SCxc";
 
@@ -29,7 +29,13 @@ const DADOS_FALLBACK = {
     rifas: [
         {
             titulo: "Super Rifa de Natal",
-            premio: "1º: TV Samsung 43\" + Fonte pets | 2º: Air Fryer Britânia + Cama Nuvem | 3º: Aspirador portátil + Comedouro | 4º: Cafeteira + Kit café | 5º: Pix R$ 500 + Chinelo + Bolsa pet",
+            premios: [
+                "1º: TV Samsung 43\" + Fonte de água para pets",
+                "2º: Air Fryer Britânia + Cama Nuvem",
+                "3º: Aspirador de pó portátil sem fio + Comedouro elevado individual",
+                "4º: Cafeteira Cadence + 2 xícaras + Kit café + Comedouro elevado duplo",
+                "5º: Pix de R$ 500 + Chinelo personalizado + Bolsa de transporte pet"
+            ],
             valorCota: "R$ 10,00",
             dataSorteio: "",
             destino: "Sorteio realizado após a venda de todas as cotas. Toda a renda custeia ração, areia e cuidados veterinários para os +100 gatos.",
@@ -164,23 +170,55 @@ async function carregarPlanilhaGoogle() {
         }
 
         if (csvRifas.length >= 2) {
-            dadosAtuais.rifas = csvRifas.slice(1).map(row => {
-                const listaImgs = (row[6] || "")
-                    .split(",")
-                    .map(u => formatarUrlImagem(u))
-                    .filter(u => u !== "");
+            const rifasAgrupadas = [];
+            let rifaAtual = null;
 
-                return {
-                    titulo: row[0] || "Rifa Solidária",
-                    premio: row[1] || "",
-                    valorCota: row[2] || "R$ 10,00",
-                    dataSorteio: (row[3] || "").trim(),
-                    destino: row[4] || "",
-                    linkExterno: row[5] || "#",
-                    imagens: listaImgs.length > 0 ? listaImgs : ["https://placehold.co/600x400/e76f51/ffffff?text=Rifa+Solidaria"],
-                    status: row[7] || "Ativa"
-                };
+            csvRifas.slice(1).forEach(row => {
+                const titulo = (row[0] || "").trim();
+                const premioCelula = (row[1] || "").trim();
+                const imagemCelula = (row[6] || "").trim();
+
+                const novasImagens = imagemCelula
+                    ? imagemCelula.split(",").map(u => formatarUrlImagem(u)).filter(u => u !== "")
+                    : [];
+
+                if (titulo !== "") {
+                    const premiosIniciais = premioCelula
+                        ? premioCelula.split("|").map(p => p.trim()).filter(p => p !== "")
+                        : [];
+
+                    rifaAtual = {
+                        titulo: titulo,
+                        premios: premiosIniciais,
+                        valorCota: (row[2] || "R$ 10,00").trim(),
+                        dataSorteio: (row[3] || "").trim(),
+                        destino: (row[4] || "").trim(),
+                        linkExterno: (row[5] || "#").trim(),
+                        imagens: novasImagens,
+                        status: (row[7] || "Ativa").trim()
+                    };
+                    rifasAgrupadas.push(rifaAtual);
+                } else if (rifaAtual) {
+                    if (premioCelula !== "") {
+                        premioCelula.split("|").forEach(p => {
+                            if (p.trim() !== "") rifaAtual.premios.push(p.trim());
+                        });
+                    }
+                    if (novasImagens.length > 0) {
+                        rifaAtual.imagens.push(...novasImagens);
+                    }
+                }
             });
+
+            rifasAgrupadas.forEach(r => {
+                if (!r.imagens || r.imagens.length === 0) {
+                    r.imagens = ["https://placehold.co/600x400/e76f51/ffffff?text=Rifa+Solidaria"];
+                }
+            });
+
+            if (rifasAgrupadas.length > 0) {
+                dadosAtuais.rifas = rifasAgrupadas;
+            }
         }
 
         if (csvParceiros.length >= 2) {
@@ -340,6 +378,9 @@ function criarCardRifaHTML(rifa, index) {
     indicesCarrosselRifas[index] = 0;
 
     const temMultiplasFotos = imgs.length > 1;
+    const listaPremios = Array.isArray(rifa.premios) && rifa.premios.length > 0
+        ? rifa.premios
+        : (rifa.premio ? rifa.premio.split("|").map(p => p.trim()).filter(Boolean) : []);
 
     return `
         <article class="card-rifa ${ativa ? "" : "encerrada"}">
@@ -374,11 +415,24 @@ function criarCardRifaHTML(rifa, index) {
                 </div>
 
                 <h3 style="color: var(--cor-primaria); margin-bottom: 8px;">${rifa.titulo}</h3>
-                <p style="font-size: 0.95rem;"><strong>Prêmios:</strong> ${rifa.premio}</p>
+
+                ${listaPremios.length > 0 ? `
+                    <div style="margin: 12px 0;">
+                        <strong style="display: block; margin-bottom: 8px; color: var(--cor-primaria);">🎁 Prêmios:</strong>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            ${listaPremios.map(item => `
+                                <div style="padding: 8px 12px; border-radius: 8px; background: #faf8fc; border: 1px solid #ede7f6; font-size: 0.9rem;">
+                                    ${item}
+                                </div>
+                            `).join("")}
+                        </div>
+                    </div>
+                ` : ""}
+
                 <div class="detalhes-rifa">
                     <p><strong>Valor da Cota:</strong> ${rifa.valorCota}</p>
                     ${rifa.dataSorteio ? `<p><strong>Sorteio:</strong> ${rifa.dataSorteio}</p>` : ""}
-                    <p style="margin-top: 6px; color: var(--cor-texto-suave);">${rifa.destino}</p>
+                    ${rifa.destino ? `<p style="margin-top: 6px; color: var(--cor-texto-suave);">${rifa.destino}</p>` : ""}
                 </div>
                 ${ativa
                     ? `<a href="${rifa.linkExterno}" target="_blank" rel="noopener" class="btn btn-primario" style="width: 100%;">
