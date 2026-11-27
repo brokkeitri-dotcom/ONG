@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adotar um Gatinho (+100 Disponíveis) | Lar dos Gatinhos</title>
+    <title>Adotar e Apadrinhar (+130 Gatinhos) | Lar dos Gatinhos</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -24,10 +24,9 @@
 
             <ul class="nav-links" id="lista-menu-mobile">
                 <li><a href="../index.html" class="">Início</a></li>
-                <li><a href="adocao.html" class="ativo">Adotar Gatos</a></li>
+                <li><a href="adocao.html" class="ativo">Adotar / Apadrinhar</a></li>
                 <li><a href="rifas.html" class="">Rifas Solidárias</a></li>
                 <li><a href="colaboradores.html" class="">Colaboradores</a></li>
-                <li><a href="transparencia.html" class="">Transparência & PIX</a></li>
                 <li><a href="sobre.html" class="">Quem Somos</a></li>
             </ul>
         </div>
@@ -40,12 +39,40 @@
     <main class="container">
         <section>
             <div class="titulo-secao" style="margin-top: 20px;">
-                <h2>Nossos Gatinhos para Adoção</h2>
-                <p>Encontre seu novo melhor amigo entre os mais de 100 gatinhos resgatados. Todos são entregues castrados, vacinados e mediante entrevista responsável.</p>
+                <h2>Adoção e Apadrinhamento</h2>
+                <p>Encontre seu novo companheiro ou apadrinhe um dos mais de 130 gatinhos acolhidos pelo Lar dos Gatinhos em Sorocaba.</p>
+            </div>
+
+            <div class="aviso-adocao" style="background: #fff8eb; border-left: 5px solid #e76f51; border-radius: 12px; padding: 18px 22px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 8px 0; color: #2d2a32;">⚠️ ATENÇÃO — ADOTE COM AMOR E RESPONSABILIDADE</h3>
+                <p style="margin: 0 0 12px 0; font-weight: 700; color: #2d2a32;">
+                    Só atendemos adotantes com horários agendados e com entrevistas aprovadas.
+                </p>
+                <ul style="margin: 0 0 14px 0; padding-left: 20px; line-height: 1.65; color: #2d2a32;">
+                    <li><strong>Agendamento obrigatório:</strong> nossas visitas são feitas somente com horário marcado.</li>
+                    <li><strong>Entrevista aprovada:</strong> adoções responsáveis começam com uma entrevista.</li>
+                    <li><strong>Nosso compromisso:</strong> garantir o bem-estar dos gatinhos e a segurança da adoção.</li>
+                </ul>
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px;">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdRWCAuDdSwlGB6dscTOuoNoRWBuma3x2r9VygIzxuZj3_jnA/viewform" target="_blank" rel="noopener noreferrer" class="btn btn-roxo" style="margin: 0;">
+                        Preencher Formulário de Entrevista
+                    </a>
+                    <span style="font-size: 0.92rem; color: #2d2a32;">
+                        Acompanhe e fale conosco também no Instagram:
+                        <a href="https://www.instagram.com/largatinhosorocaba/" target="_blank" rel="noopener noreferrer">
+                            <strong>@largatinhosorocaba</strong>
+                        </a>
+                    </span>
+                </div>
             </div>
 
             <div class="barra-filtros">
                 <input type="text" id="filtro-busca" placeholder="Buscar por nome ou característica..." oninput="aplicarFiltros()">
+                <select id="filtro-modalidade" onchange="aplicarFiltros()">
+                    <option value="Todos">Adoção e Apadrinhamento</option>
+                    <option value="Adoção">Apenas Adoção</option>
+                    <option value="Apadrinhamento">Apenas Apadrinhamento</option>
+                </select>
                 <select id="filtro-idade" onchange="aplicarFiltros()">
                     <option value="Todos">Todas as Idades</option>
                     <option value="Filhote">Filhotes</option>
@@ -76,6 +103,28 @@
         <div class="container">
             <p><strong>ONG Lar Gatinhos Sorocaba</strong> — Amor, Resgate e Adoção Responsável.</p>
             <p style="margin-top: 6px; font-size: 0.85rem;">CNPJ: 61.953.983/0001-75 • Sorocaba/SP</p>
+
+            <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin: 14px 0;">
+                <a href="https://www.instagram.com/largatinhosorocaba/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Lar dos Gatinhos" title="Instagram"
+                    style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.14); color: #fff; transition: transform 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2zm-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6zm9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25zM12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+                    </svg>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61565746620611" target="_blank" rel="noopener noreferrer" aria-label="Facebook Lar dos Gatinhos" title="Facebook"
+                    style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.14); color: #fff; transition: transform 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/>
+                    </svg>
+                </a>
+                <a id="link-whatsapp-rodape" href="https://wa.me/5515999999999" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp Lar dos Gatinhos" title="WhatsApp"
+                    style="display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.14); color: #fff; transition: transform 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.82 14.01c-.24.68-1.41 1.3-1.95 1.38-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.43.75-2.13 1.02-2.42.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.29-.12.57.17.29.75 1.24 1.61 2.01 1.11.99 2.04 1.3 2.33 1.44.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.39-.24.65-.14.27.1 1.69.8 1.98.94.29.14.48.22.55.34.07.12.07.69-.17 1.37z"/>
+                    </svg>
+                </a>
+            </div>
+
             <p style="margin-top: 6px; font-size: 0.8rem; opacity: 0.85;">
                 🔒 Site Seguro • © 2026 Lar Gatinhos. Todos os direitos reservados.
             </p>
