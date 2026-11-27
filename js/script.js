@@ -3,6 +3,7 @@
    ========================================================= */
 const SPREADSHEET_ID = "1y139l0OucUYD2VncI02RvYTmkNOx_38tqFkRUt6SCxc";
 const LINK_FORMULARIO_ADOCAO = "https://docs.google.com/forms/d/e/1FAIpQLSdRWCAuDdSwlGB6dscTOuoNoRWBuma3x2r9VygIzxuZj3_jnA/viewform";
+const LINK_APADRINHAMENTO_MP = "https://www.mercadopago.com.br/subscriptions/checkout?preapproval_plan_id=2c9380849250c84301926c5e4e1508ee";
 
 const SHEETS_URLS = {
     GATOS: `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=Gatos`,
@@ -13,7 +14,7 @@ const SHEETS_URLS = {
 
 const DADOS_FALLBACK = {
     geral: {
-        whatsapp: "5515999999999",
+        whatsapp: "5515997073399",
         chavePix: "lardosgatinhos@pix.org.br",
         mesReferencia: "Novembro / 2026",
         arrecadado: "R$ 8.450,00",
@@ -403,13 +404,8 @@ function renderizarParceiros() {
 function criarCardGatoHTML(gato) {
     const ehApadrinhamento = normalizarModalidade(gato.modalidade) === "Apadrinhamento";
 
-    const msgApadrinhar = encodeURIComponent(
-        `Olá! Vi o(a) gatinho(a) *${gato.nome}* (${gato.idade} - ${gato.sexo}) na seção de Apadrinhamento do site do Lar dos Gatinhos e gostaria de saber como funciona para ser padrinho/madrinha!`
-    );
-    const linkApadrinhar = `https://wa.me/${dadosAtuais.geral.whatsapp}?text=${msgApadrinhar}`;
-
-    const linkBotao = ehApadrinhamento ? linkApadrinhar : LINK_FORMULARIO_ADOCAO;
-    const textoBotao = ehApadrinhamento ? `Quero Apadrinhar ${gato.nome}` : `Quero Adotar ${gato.nome}`;
+    const linkBotao = ehApadrinhamento ? LINK_APADRINHAMENTO_MP : LINK_FORMULARIO_ADOCAO;
+    const textoBotao = ehApadrinhamento ? `Apadrinhar ${gato.nome} ↗` : `Quero Adotar ${gato.nome}`;
     const estiloBotao = ehApadrinhamento
         ? "width: 100%; background: #f4a261; color: #2d2a32; font-weight: 700;"
         : "width: 100%;";
