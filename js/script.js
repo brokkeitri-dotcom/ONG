@@ -23,7 +23,8 @@ const DADOS_FALLBACK = {
         outros: "R$ 940,00",
         bannerUrl: "",
         imagensInicial: [],
-        imagensQuemSomos: []
+        imagensQuemSomos: [],
+        qtdGatos: "100"
     },
     parceiros: [
         { nome: "PetShop Sorocaba", categoria: "Ração & Suprimentos", logo: "https://placehold.co/200x80/6b4c9a/ffffff?text=PetShop+Sorocaba", link: "#" },
@@ -43,7 +44,7 @@ const DADOS_FALLBACK = {
             ],
             valorCota: "R$ 10,00",
             dataSorteio: "",
-            destino: "Sorteio realizado após a venda de todas as cotas. Toda a renda custeia ração, areia e cuidados veterinários para os +130 gatos.",
+            destino: "Sorteio realizado após a venda de todas as cotas. Toda a renda custeia ração, areia e cuidados veterinários para os +100 gatos.",
             linkExterno: "https://rd.app/s/super-rifa-de-natal/9862339",
             imagens: [
                 "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/62695f96-ca8f-4121-8545-a2e9169ea5c2.webp",
@@ -67,7 +68,6 @@ const GATOS_POR_PAGINA = 12;
 const indicesCarrosselRifas = {};
 const estadoCarrosseisSecao = {};
 
-/* Controle do Botão Hambúrguer (3 traços) */
 function inicializarMenuMobile() {
     const btnMenu = document.getElementById("btn-menu-mobile");
     const listaMenu = document.getElementById("lista-menu-mobile");
@@ -178,6 +178,8 @@ async function carregarPlanilhaGoogle() {
                 .map(u => formatarUrlImagem(u))
                 .filter(u => u !== "");
 
+            const qtdPlanilha = (g[10] || "").replace(/[^0-9]/g, "");
+
             dadosAtuais.geral = {
                 whatsapp: g[0] || dadosAtuais.geral.whatsapp,
                 chavePix: g[1] || dadosAtuais.geral.chavePix,
@@ -188,7 +190,8 @@ async function carregarPlanilhaGoogle() {
                 outros: g[6] || dadosAtuais.geral.outros,
                 bannerUrl: formatarUrlImagem(g[7] || ""),
                 imagensInicial: fotosInicial,
-                imagensQuemSomos: fotosQuemSomos
+                imagensQuemSomos: fotosQuemSomos,
+                qtdGatos: qtdPlanilha || dadosAtuais.geral.qtdGatos
             };
         }
 
@@ -283,6 +286,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function preencherDadosGerais(geral) {
+    const qtd = geral.qtdGatos || "100";
+    document.querySelectorAll(".qtd-gatos-dinamica").forEach(el => {
+        el.textContent = qtd;
+    });
+
     const elMes = document.getElementById("mes-referencia");
     if (elMes) elMes.textContent = geral.mesReferencia;
 
