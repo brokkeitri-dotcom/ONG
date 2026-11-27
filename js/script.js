@@ -2,6 +2,7 @@
    LAR DOS GATINHOS - MOTOR COMPLETO COM GOOGLE SHEETS
    ========================================================= */
 const SPREADSHEET_ID = "1y139l0OucUYD2VncI02RvYTmkNOx_38tqFkRUt6SCxc";
+const LINK_FORMULARIO_ADOCAO = "https://docs.google.com/forms/d/e/1FAIpQLSdRWCAuDdSwlGB6dscTOuoNoRWBuma3x2r9VygIzxuZj3_jnA/viewform";
 
 const SHEETS_URLS = {
     GATOS: `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=Gatos`,
@@ -41,7 +42,7 @@ const DADOS_FALLBACK = {
             ],
             valorCota: "R$ 10,00",
             dataSorteio: "",
-            destino: "Sorteio realizado após a venda de todas as cotas. Toda a renda custeia ração, areia e cuidados veterinários para os +100 gatos.",
+            destino: "Sorteio realizado após a venda de todas as cotas. Toda a renda custeia ração, areia e cuidados veterinários para os +130 gatos.",
             linkExterno: "https://rd.app/s/super-rifa-de-natal/9862339",
             imagens: [
                 "https://cdn.rd.app/raffles/a3333bb0-ece5-4109-a3fe-90dcf522826c/62695f96-ca8f-4121-8545-a2e9169ea5c2.webp",
@@ -53,8 +54,8 @@ const DADOS_FALLBACK = {
         }
     ],
     gatos: [
-        { nome: "Frajola", idade: "Adulto", sexo: "Macho", saude: "Castrado • Vacinado • Negativo", perfil: "Negativo", destaque: true, bio: "Muito dócil, adora colo e se dá bem com outros gatos.", foto: "https://placehold.co/400x350/6b4c9a/ffffff?text=Frajola" },
-        { nome: "Amora", idade: "Filhote", sexo: "Fêmea", saude: "1ª Dose Vacina • Negativo", perfil: "Negativo", destaque: true, bio: "Brincalhona e curiosa, resgatada de uma caixa na chuva.", foto: "https://placehold.co/400x350/f4a261/2d2a32?text=Amora" }
+        { nome: "Frajola", idade: "Adulto", sexo: "Macho", saude: "Castrado • Vacinado • Negativo", perfil: "Negativo", destaque: true, bio: "Muito dócil, adora colo e se dá bem com outros gatos.", foto: "https://placehold.co/400x350/6b4c9a/ffffff?text=Frajola", modalidade: "Adoção" },
+        { nome: "Amora", idade: "Filhote", sexo: "Fêmea", saude: "1ª Dose Vacina • Negativo", perfil: "Negativo", destaque: true, bio: "Brincalhona e curiosa, resgatada de uma caixa na chuva.", foto: "https://placehold.co/400x350/f4a261/2d2a32?text=Amora", modalidade: "Adoção" }
     ]
 };
 
@@ -105,6 +106,12 @@ function formatarUrlExterna(url) {
         limpa = "https://" + limpa;
     }
     return limpa;
+}
+
+function normalizarModalidade(valor) {
+    const texto = (valor || "").trim().toLowerCase();
+    if (texto.includes("apadrinh")) return "Apadrinhamento";
+    return "Adoção";
 }
 
 function parseCSV(textoCSV) {
@@ -193,7 +200,8 @@ async function carregarPlanilhaGoogle() {
                 perfil: row[4] || "Negativo",
                 destaque: (row[5] || "").toUpperCase() === "SIM",
                 bio: row[6] || "Esperando um lar cheio de amor.",
-                foto: formatarUrlImagem(row[7]) || "https://placehold.co/400x350/6b4c9a/ffffff?text=Lar+dos+Gatinhos"
+                foto: formatarUrlImagem(row[7]) || "https://placehold.co/400x350/6b4c9a/ffffff?text=Lar+dos+Gatinhos",
+                modalidade: normalizarModalidade(row[8])
             }));
         }
 
@@ -294,8 +302,13 @@ function preencherDadosGerais(geral) {
 
     const elWp = document.getElementById("link-whatsapp-parceiro");
     if (elWp) {
-        elWp.href = `https://wa.me/${geral.whatsapp}?text=Olá! Gostaria de cadastrar minha empresa como parceira do Lar dos Gatinhos.`;
+        elWp.href = `https://wa.me/${geral.whatsapp}?text=${encodeURIComponent("Olá! Gostaria de cadastrar minha empresa como parceira do Lar dos Gatinhos.")}`;
     }
+
+    const linksWpRodape = document.querySelectorAll("#link-whatsapp-rodape, .link-whatsapp-geral");
+    linksWpRodape.forEach(el => {
+        el.href = `https://wa.me/${geral.whatsapp}?text=${encodeURIComponent("Olá! Vim pelo site do Lar dos Gatinhos.")}`;
+    });
 
     const isSubpagina = window.location.pathname.includes("/paginas/");
     const imgPadrao = isSubpagina
@@ -388,8 +401,18 @@ function renderizarParceiros() {
 }
 
 function criarCardGatoHTML(gato) {
-    const msgZap = encodeURIComponent(`Olá! Vi o(a) gatinho(a) *${gato.nome}* (${gato.idade} - ${gato.sexo}) no site do Lar dos Gatinhos e gostaria de saber mais sobre a adoção!`);
-    const linkZap = `https://wa.me/${dadosAtuais.geral.whatsapp}?text=${msgZap}`;
+    const ehApadrinhamento = normalizarModalidade(gato.modalidade) === "Apadrinhamento";
+
+    const msgApadrinhar = encodeURIComponent(
+        `Olá! Vi o(a) gatinho(a) *${gato.nome}* (${gato.idade} - ${gato.sexo}) na seção de Apadrinhamento do site do Lar dos Gatinhos e gostaria de saber como funciona para ser padrinho/madrinha!`
+    );
+    const linkApadrinhar = `https://wa.me/${dadosAtuais.geral.whatsapp}?text=${msgApadrinhar}`;
+
+    const linkBotao = ehApadrinhamento ? linkApadrinhar : LINK_FORMULARIO_ADOCAO;
+    const textoBotao = ehApadrinhamento ? `Quero Apadrinhar ${gato.nome}` : `Quero Adotar ${gato.nome}`;
+    const estiloBotao = ehApadrinhamento
+        ? "width: 100%; background: #f4a261; color: #2d2a32; font-weight: 700;"
+        : "width: 100%;";
 
     return `
         <article class="card-gato">
@@ -397,6 +420,11 @@ function criarCardGatoHTML(gato) {
                 <img src="${gato.foto}" alt="${gato.nome}" loading="lazy">
                 <span class="badge-categoria">${gato.idade}</span>
                 <span class="badge-sexo">${gato.sexo}</span>
+                ${ehApadrinhamento ? `
+                    <span style="position: absolute; bottom: 10px; left: 10px; background: #f4a261; color: #2d2a32; padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                        💛 Apadrinhamento
+                    </span>
+                ` : ""}
             </div>
             <div class="card-gato-info">
                 <h3>${gato.nome}</h3>
@@ -404,8 +432,8 @@ function criarCardGatoHTML(gato) {
                     <span class="tag">${gato.saude}</span>
                 </div>
                 <p>${gato.bio}</p>
-                <a href="${linkZap}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%;">
-                    Quero Adotar ${gato.nome}
+                <a href="${linkBotao}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="${estiloBotao}">
+                    ${textoBotao}
                 </a>
             </div>
         </article>
@@ -417,16 +445,18 @@ function aplicarFiltros() {
     if (!container) return;
 
     const termo = (document.getElementById("filtro-busca")?.value || "").toLowerCase();
+    const modalidade = document.getElementById("filtro-modalidade")?.value || "Todos";
     const idade = document.getElementById("filtro-idade")?.value || "Todos";
     const sexo = document.getElementById("filtro-sexo")?.value || "Todos";
     const especial = document.getElementById("filtro-especial")?.value || "Todos";
 
     listaGatosFiltrada = dadosAtuais.gatos.filter(gato => {
         const bateNome = gato.nome.toLowerCase().includes(termo) || gato.bio.toLowerCase().includes(termo);
+        const bateModalidade = modalidade === "Todos" || normalizarModalidade(gato.modalidade) === modalidade;
         const bateIdade = idade === "Todos" || gato.idade === idade;
         const bateSexo = sexo === "Todos" || gato.sexo === sexo;
         const batePerfil = especial === "Todos" || gato.perfil === especial;
-        return bateNome && bateIdade && bateSexo && batePerfil;
+        return bateNome && bateModalidade && bateIdade && bateSexo && batePerfil;
     });
 
     paginaAtual = 1;
